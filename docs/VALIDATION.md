@@ -20,4 +20,4 @@ Screenshots: [P1 fixture](screenshots/p1-fixture.png), [P2 fixture](screenshots/
 
 The public checks use an unauthenticated Chromium session. Safari and Firefox have not been separately exercised.
 
-[GitHub Actions run 37472472989](https://github.com/mikamikasuki/mikamika/actions/runs/37472472989) passed the complete verification suite and deployed build `d552d6c`.
+[GitHub Actions run 37472472989](https://github.com/mikamikasuki/mikamikasuki/actions/runs/37472472989) passed the complete verification suite and deployed build `d552d6c`.

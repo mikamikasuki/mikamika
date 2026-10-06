@@ -1,8 +1,8 @@
 # 内容维护与本地预览
 
-仓库：<https://github.com/mikamikasuki/mikamika>
+仓库：<https://github.com/mikamikasuki/mikamikasuki>
 
-Pages：<https://mikamikasuki.github.io/mikamika/>
+Pages：<https://mikamikasuki.github.io/mikamikasuki/>
 
 需要 Node.js 22.15.0（CI 固定此版本）。首次运行：
 
@@ -93,12 +93,12 @@ Pages 不自动弹出气泡；reduced-motion 会关闭交互动画。主题支�
 
 ## 部署与缓存排查
 
-工作流响应 main 上的代码/配置/照片变化、手动触发和每日一次统计更新（12:27 UTC）。依赖与 Actions 均固定版本/提交，先运行完整验证，再一次性上传 dist 到 Pages。定时任务只更新部署产物，不创建每日机器人 commit。Pages 仓库设置应使用 **GitHub Actions**；基路径为 `/mikamika/`。构建输出使用相对资源地址，README 使用绝对 Pages URL。
+工作流响应 main 上的代码/配置/照片变化、手动触发和每日一次统计更新（12:27 UTC）。依赖与 Actions 均固定版本/提交，先运行完整验证，再一次性上传 dist 到 Pages。定时任务只更新部署产物，不创建每日机器人 commit。Pages 仓库设置应使用 **GitHub Actions**；基路径为 `/mikamikasuki/`。构建输出使用相对资源地址，README 使用绝对 Pages URL。
 
 稳定动画地址：
 
-- `https://mikamikasuki.github.io/mikamika/assets/readme/profile-light.svg`
-- `https://mikamikasuki.github.io/mikamika/assets/readme/profile-dark.svg`
+- `https://mikamikasuki.github.io/mikamikasuki/assets/readme/profile-light.svg`
+- `https://mikamikasuki.github.io/mikamikasuki/assets/readme/profile-dark.svg`
 - 同目录 `profile-light-static.svg` / `profile-dark-static.svg`
 
 GitHub 图片代理可能延迟显示更新。先检查 Actions 成功的 SHA，再直接检查 Pages 图片和 data.json 的构建日期；必要时在 embed 的资源 URL 增加一个新的 `?v=` 版本号。不要每分钟改变版本或承诺代理立即刷新。
