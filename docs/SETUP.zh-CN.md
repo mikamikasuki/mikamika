@@ -112,3 +112,5 @@ Pages 只响应悬停和点击：气泡跟随州内鼠标位置，点击后固�
 README 气泡按 `bubble.scale: 1.18` 整体放大；说明的逻辑字号为 10.5px，照片逻辑尺寸为 132 × 82px，实际显示约 156 × 97px；三张模拟风景统一采用柔和紫、粉与灰蓝配色。
 
 横幅高度 170px，主标题 48px；三行简介字号 19.5px、基线间隔 41px，云朵比例 1.08。统计标签与数字 16.5px，卡片高度 250px，地图区域 360×195px，评级圆与 streak 圆半径均为 44px。README 使用 100% 内容宽度；外层边距由 GitHub 决定。
+
+评级文字为同色、同基线的 26.4px 粗体，圆环线宽为 6.2px。Streak 的镂空火焰来自 GitHub Readme Streak Stats，版权与 MIT 许可见 `vendor/github-readme-streak-stats-LICENSE`。
