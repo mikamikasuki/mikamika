@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import sharp from 'sharp';
-import { STATES, CODES } from './states.mjs';
+import { PLACES, PLACE_CODES } from './states.mjs';
 const supported=/\.(jpe?g|png|webp)$/i;
 const natural=new Intl.Collator('en',{numeric:true,sensitivity:'base'});
 const within=(root,p)=>p===root||p.startsWith(root+path.sep);
@@ -15,14 +15,14 @@ export async function scanPhotos(root,config,out,{cache='.cache/photos'}={}){
    if(!within(root,real))throw new Error(`Photo link escapes photos root: ${path.relative(root,p)}`);
    if(e.isSymbolicLink()){warnings.push(`Skipped symbolic link: ${path.relative(root,p)}`);continue;}
    if(e.isDirectory()){
-    if(CODES.includes(e.name.toUpperCase())){const code=e.name.toUpperCase();if(dirs.has(code))throw new Error(`Duplicate state directories: ${code}`);dirs.set(code,p);}else await walk(p);
+    if(PLACE_CODES.includes(e.name.toUpperCase())){const code=e.name.toUpperCase();if(dirs.has(code))throw new Error(`Duplicate state directories: ${code}`);dirs.set(code,p);}else await walk(p);
    }
   }
  }
  await walk(root);
  const states=[];
- for(const base of STATES){
-  const c=config.states[base.code]??{},dir=dirs.get(base.code),valid=[];
+ for(const base of PLACES){
+  const c=(base.kind==='district'?config.regions?.[base.code]:config.states[base.code])??{},dir=dirs.get(base.code),valid=[];
   if(dir&&c.visited!==false){
    const files=(await fs.readdir(dir,{withFileTypes:true})).filter(e=>!e.name.startsWith('.')&&!e.isDirectory()&&supported.test(e.name)).sort((a,b)=>natural.compare(a.name,b.name));
    for(const f of files){const p=path.join(dir,f.name);const real=await fs.realpath(p);if(!within(root,real))throw new Error(`Photo link escapes photos root: ${base.code}/${f.name}`);if(f.isSymbolicLink()){warnings.push(`Skipped symbolic link: ${base.code}/${f.name}`);continue;}
@@ -54,5 +54,5 @@ export async function scanPhotos(root,config,out,{cache='.cache/photos'}={}){
  }
  const used=new Set(states.flatMap(s=>s.photos.flatMap(f=>[path.basename(f.src),path.basename(f.thumb)])));
  for(const f of await fs.readdir(path.join(out,'photos')))if(!used.has(f))await fs.unlink(path.join(out,'photos',f));
- return {schema_version:1,visited:states.filter(s=>s.visited).length,states,warnings};
+ return {schema_version:1,visited:states.filter(s=>s.kind==='state'&&s.visited).length,states:states.filter(s=>s.kind==='state'),regions:states.filter(s=>s.kind==='district'),warnings};
 }

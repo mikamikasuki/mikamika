@@ -8,7 +8,7 @@ export function frameAt(timeMs,preview,states){
  return {state:states[index],t,index,opacity,highlight,spread:progress(t,p.expand)*(1-progress(t,p.collapse)),lift:10*(1-opacity)+(t>=p.hold[0]&&t<=p.hold[1]?Math.sin((t-p.hold[0])/1100)*1.2:0),scale:.96+.04*opacity};
 }
 export function selectPreviews(manifest,preview,date='1970-01-01'){
- let a=manifest.states.filter(s=>s.visited&&s.preview_enabled&&s.preview.length);a.sort((x,y)=>{const ix=preview.order.indexOf(x.code),iy=preview.order.indexOf(y.code);return (ix<0?999:ix)-(iy<0?999:iy)||x.code.localeCompare(y.code);});
+ let a=[...manifest.states,...(manifest.regions??[])].filter(s=>s.visited&&s.preview_enabled&&s.preview.length);a.sort((x,y)=>{const ix=preview.order.indexOf(x.code),iy=preview.order.indexOf(y.code);return (ix<0?999:ix)-(iy<0?999:iy)||x.code.localeCompare(y.code);});
  if(preview.selection==='daily'&&a.length){const k=Math.floor(Date.parse(date)/86400000)%a.length;a=[...a.slice(k),...a.slice(0,k)];}
  return preview.enabled?a.slice(0,preview.max_states):[];
 }

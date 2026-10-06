@@ -51,3 +51,7 @@ const rows = `01 AL Alabama Central
 56 WY Wyoming Mountain`;
 export const STATES = rows.split('\n').map(row=>{const [fips,code,...rest]=row.split(' ');return {fips,code,name:rest.slice(0,-1).join(' '),group:rest.at(-1)};});
 export const CODES = STATES.map(s=>s.code);
+
+export const REGIONS=[{fips:"11",code:"DC",name:"Washington, D.C.",group:"Eastern",kind:"district"}];
+export const PLACES=[...STATES.map(s=>({...s,kind:"state"})),...REGIONS];
+export const PLACE_CODES=PLACES.map(s=>s.code);

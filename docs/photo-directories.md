@@ -54,3 +54,5 @@ Folder groups organize files; a state may have multiple actual timezones. State 
 | West Virginia | WV | photos/Eastern/WV/ |
 | Wisconsin | WI | photos/Central/WI/ |
 | Wyoming | WY | photos/Mountain/WY/ |
+
+Washington, D.C.: `photos/Eastern/DC/`. Configure it under `regions.DC`; it is displayed separately from the fifty-state total.

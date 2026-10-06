@@ -95,6 +95,20 @@
       194
     ],
     "title_size": 16,
-    "subtitle_size": 11.5
+    "subtitle_size": 11.5,
+    "origin_anchor": [
+      930,
+      307
+    ],
+    "max_shift": [
+      -22,
+      83,
+      -12,
+      12
+    ],
+    "glass": {
+      "opacity": 0.36,
+      "background_blur": 2.5
+    }
   }
 }

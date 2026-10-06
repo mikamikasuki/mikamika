@@ -17,6 +17,7 @@ const travel=travelSchema.parse(parse(await fs.readFile('content/travel.yaml','u
 const layout=JSON.parse(await fs.readFile('content/layout.json'));const buildDate=(process.env.BUILD_DATE??new Date().toISOString()).slice(0,10);
 let photoRoot='photos';
 if(fixtureMode){
+ travel.states={};travel.regions={};
  photoRoot='.test-output/fixture-photos';await fs.rm(photoRoot,{recursive:true,force:true});
  for(const code of ['CA','NJ','AK','HI','RI','TX','NY','OR']){
   await fs.mkdir(`${photoRoot}/Testing/${code}`,{recursive:true});
@@ -28,7 +29,7 @@ if(fixtureMode){
 const manifest=await scanPhotos(photoRoot,travel,stage);manifest.build_date=buildDate;
 for(const warning of manifest.warnings)console.warn(warning);
 const stats=fixtureMode?{status:'fixture',source:'visual-test fixture',stars:79,commits:63,prs:202,issues:26,contributed:134,total:394,created_at:'2025-05-11T00:00:00Z',rank:{level:'B+',percentile:45},streak:{count:7,start:'2025-09-29',end:'2025-10-05'}}:await fetchStats(profile,{token:process.env.OFFLINE==='1'?undefined:localToken()});
-const map=buildMap(layout);
+const map=buildMap(layout,{includeRegions:true});
 const embedded=structuredClone(manifest);for(const s of selectPreviews(embedded,travel.preview,buildDate))for(const f of s.preview)f.dataURI='data:image/webp;base64,'+(await fs.readFile(path.join(stage,f.thumb))).toString('base64');
 await fs.mkdir(path.join(stage,'assets/readme'),{recursive:true});
 for(const theme of ['light','dark'])for(const motion of ['animated','static']){

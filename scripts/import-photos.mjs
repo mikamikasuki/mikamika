@@ -1,5 +1,5 @@
-import fs from 'node:fs/promises';import path from 'node:path';import crypto from 'node:crypto';import sharp from 'sharp';import {STATES} from '../src/content/states.mjs';
-const args=process.argv.slice(2),get=key=>args[args.indexOf(key)+1],code=get('--state')?.toUpperCase(),source=get('--from');const state=STATES.find(s=>s.code===code);
+import fs from 'node:fs/promises';import path from 'node:path';import crypto from 'node:crypto';import sharp from 'sharp';import {PLACES} from '../src/content/states.mjs';
+const args=process.argv.slice(2),get=key=>args[args.indexOf(key)+1],code=get('--state')?.toUpperCase(),source=get('--from');const state=PLACES.find(s=>s.code===code);
 if(!state||!source){console.error('Usage: npm run import-photos -- --state CA --from /path/to/private/photos');process.exit(1);}
 const root=await fs.realpath('photos'),from=await fs.realpath(source);let destination;
 for(const group of await fs.readdir(root,{withFileTypes:true})){if(!group.isDirectory())continue;for(const dir of await fs.readdir(path.join(root,group.name),{withFileTypes:true})){if(dir.isDirectory()&&dir.name.toUpperCase()===code){if(destination)throw new Error(`Duplicate ${code} folders`);destination=path.join(root,group.name,dir.name);}}}

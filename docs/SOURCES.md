@@ -8,3 +8,5 @@
 - Test images: `tests/fixtures/landscape.png` is a synthetic geometric landscape, generated for tests. It is not a photograph or travel record. Tests derive colored variants for multiple layers; fixture builds are separate from dist.
 
 GitHub Pages workflow versions were checked against the official repositories on 2026-10-06. Checkout 7.0.1, setup-node 7.0.0, cache 6.1.0 and the official configure-pages v5 / upload-pages-artifact v4 / deploy-pages v4 actions are pinned to full commit SHAs. Deployment structure follows <https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages>.
+
+The travel journal layout was informed by the travel page in [mikamikasuki/mika](https://github.com/mikamikasuki/mika/tree/708cb069d5a48336989732b690f5039a253ff413/docs/travel): its standalone map, photo stack and album navigation.

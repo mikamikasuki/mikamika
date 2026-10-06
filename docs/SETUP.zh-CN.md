@@ -57,7 +57,7 @@ states:
     preview_enabled: true
 ```
 
-`visited: false` 优先级最高：不着色、不轮播、不发布相册照片。`true` 表示去过，无照片也计数。省略或 `null` 时，根据 `map.infer_visited_from_photos` 和有效照片推断。地图、唯一州数量、README 轮播和相册使用同一个规范化 manifest。只统计 50 州，不包含 DC。
+`visited: false` 优先级最高：不着色、不轮播、不发布相册照片。`true` 表示去过，无照片也计数。省略或 `null` 时，根据 `map.infer_visited_from_photos` 和有效照片推断。地图、唯一州数量、README 轮播和相册使用同一个规范化 manifest。州数量只统计 50 州；DC 在 `regions.DC` 中配置并单独显示，照片目录为 `photos/Eastern/DC/`。当前已配置 24 个州及 DC。
 
 `cover` 选择封面；`preview_photos` 控制气泡照片及顺序；`photo_order` 控制相册顺序。`photo_focus` 是 0–1 的横/纵焦点，缩略图按焦点裁切，不拉伸。州名缩字号以保留全文，灰字按实际字宽加省略号，详情页保留全文。空灰字保持空白。默认最多三张；第四张可把 `max_photos` 设为 4。
 
@@ -77,13 +77,13 @@ states:
 
 `content/profile.yaml`：两句横幅、三行简介、用户名和 streak 时区。简介文案来自原主页快照，并不自动随年份改写。
 
-`content/layout.json`：固定 1200×404 画布、横幅/介绍/三卡/气泡位置、字体与地图区域。README 和 Pages 使用同一渲染器、地图路径与锚点。手机把同一套卡片改为上下排列，不缩到无法使用的小字。州边界来自 Census 2017，通过 us-atlas 简化并采用 Albers USA 投影；AK/HI 有独立 inset。锚点使用最大可见多边形的内点算法，不使用 bounding-box 中心。
+`content/layout.json`：固定 1200×404 画布、横幅/介绍/三卡/气泡位置、字体与地图区域。README 和 Pages 共用地图路径与锚点。Pages 使用独立大地图、访问列表与相册布局；手机保留可点击地图和选择器。气泡尾部在局部坐标中固定，完整气泡随州锚点移动；README 位移幅度由 `bubble.origin_anchor` / `max_shift` 控制。州边界来自 Census 2017，通过 us-atlas 简化并采用 Albers USA 投影；AK/HI 有独立 inset。锚点使用最大可见多边形的内点算法，不使用 bounding-box 中心。
 
 字体使用固定依赖的 Nunito（SIL OFL），README 构建时生成字形路径，播放时不加载外部字体。Pages 使用相同字体的本地 WOFF2。默认英文内容和州名可完整显示；Nunito 不含中文字形，若改为中文介绍/州名，需更换有授权且包含这些字形的字体后构建。中文照片文件名不受影响。
 
 ## Pages 操作
 
-悬停有照片的已访问州约 140ms 出现气泡。移出后保留 250ms，可移入气泡取消关闭。点击州固定；另一州可切换；空白、关闭按钮或 Esc 解除。照片叠层和 View album 打开相册，大图可用左右键切换，Esc 返回并恢复焦点。手机使用选择器或点击地图，细小州也可通过选择器访问。相册链接 `#state=CA` 可刷新定位。
+悬停已访问州约 140ms 出现气泡；没有照片的州显示访问状态，照片叠层仅在已有真实照片时出现。移出后保留 250ms，可移入气泡取消关闭。点击州固定；另一州可切换；空白、关闭按钮或 Esc 解除。照片叠层和 View album 打开相册，大图可用左右键切换，Esc 返回并恢复焦点。手机使用选择器或点击地图，细小州也可通过选择器访问。相册链接 `#state=CA` 可刷新定位。
 
 任何手动操作都会暂停自动演示；只有连续 60 秒无操作且无固定气泡/相册/大图时恢复。reduced-motion 不自动演示。主题支持 light/dark/system；气泡放在根级 overlay 并限制在 viewport 内。
 
