@@ -1,7 +1,7 @@
 {
   "canvas": {
     "width": 1200,
-    "height": 552
+    "height": 606
   },
   "boxes": {
     "banner": [
@@ -18,21 +18,21 @@
     ],
     "stats": [
       0,
-      330,
+      344,
       414,
-      210
+      250
     ],
     "streak": [
       424,
-      330,
+      344,
       378,
-      210
+      250
     ],
     "travel": [
       812,
-      330,
+      344,
       388,
-      210
+      250
     ],
     "bubble": [
       832,
@@ -43,23 +43,23 @@
   },
   "fonts": {
     "banner": 48,
-    "about": 17.5,
-    "label": 15,
-    "number": 15,
-    "title": 16.5,
-    "large": 40,
+    "about": 19.5,
+    "label": 16.5,
+    "number": 16.5,
+    "title": 18.5,
+    "large": 44,
     "tagline": 35,
-    "card_heading": 17,
-    "card_date": 15,
-    "streak_number": 38,
-    "footer": 15
+    "card_heading": 18.5,
+    "card_date": 17,
+    "streak_number": 42,
+    "footer": 17
   },
   "map": {
     "box": [
-      874,
+      826,
+      378,
       360,
-      264,
-      156
+      195
     ]
   },
   "clouds": {
@@ -107,6 +107,6 @@
   },
   "about": {
     "baseline": 212,
-    "line_gap": 37
+    "line_gap": 41
   }
 }
