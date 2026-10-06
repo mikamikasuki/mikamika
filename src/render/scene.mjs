@@ -10,7 +10,11 @@ function transformed(values,keys,dur){return `<animateTransform attributeName="t
 const fmtDate=d=>d?new Date(d.slice(0,10)+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}):'—';
 const fmtShort=d=>d?new Date(d+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}):'—';
 const value=n=>n==null?'—':n.toLocaleString('en-US');
-function card([x,y,w,h],p){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="${p.card}" stroke="${p.border}"/>`;}
+function card([x,y,w,h],p){
+ const id=`scene-card-background-${x}-${y}`,dark=p===palettes.dark;
+ const tint=dark?['#292235','#262030','#2D2235']:['#FFF9FC','#F8F3FC','#F3EFFA'];
+ return `<g id="${id}"><defs><linearGradient id="${id}-tint" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${tint[0]}" stop-opacity=".97"/><stop offset=".55" stop-color="${tint[1]}" stop-opacity=".95"/><stop offset="1" stop-color="${tint[2]}" stop-opacity=".95"/></linearGradient><linearGradient id="${id}-edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#FFF" stop-opacity="${dark?.12:.7}"/><stop offset=".5" stop-color="#FFF" stop-opacity="${dark?.03:.12}"/><stop offset="1" stop-color="#FFF" stop-opacity="0"/></linearGradient></defs><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="url(#${id}-tint)" stroke="${p.border}"/><rect x="${x+1}" y="${y+1}" width="${w-2}" height="${h-2}" rx="15" fill="none" stroke="url(#${id}-edge)" stroke-width="1" pointer-events="none"/></g>`;
+}
 function cloudAsset(theme){const source=fs.readFileSync(new URL(`../../assets/source/mika-about-${theme}.svg`,import.meta.url),'utf8');
  return source.slice(source.indexOf('<g transform="translate(35'),source.indexOf('<!-- ambient pixels')).replace(/<animateTransform[\s\S]*?\/>/g,'').replace(/url\(#cloudSoft\)/g,'url(#scene-cloudSoft)').replace('translate(35, 0)','translate(0, 0)').replace('translate(1043, 78)','translate(0, 0)');}
 function clouds(theme,l,animated){let source=cloudAsset(theme);const marker=source.indexOf('<g transform="translate(0, 0)">',10);const pieces=[source.slice(0,marker),source.slice(marker)];return ['left','right'].map((key,i)=>{const [x,y,s]=l.clouds[key];return `<g transform="translate(${x} ${y}) scale(${s})"><g>${animated?transformed([[0,0],[6,-8],[0,0],[-6,6],[0,0]],[0,.25,.5,.75,1],i?5800:4900):''}${pieces[i]}</g></g>`;}).join('');}
