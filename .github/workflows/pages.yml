@@ -87,6 +87,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          filter: blob:none
+          sparse-checkout: README.md
       - run: |
           git fetch origin main
           git switch -C main origin/main
@@ -104,6 +107,6 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add README.md
-            git commit -m 'Refresh README image after deployment'
+            git commit -m 'update'
             git push origin HEAD:main
           fi
