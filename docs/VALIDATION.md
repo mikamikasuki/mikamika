@@ -19,3 +19,5 @@ Screenshots: [P1 fixture](screenshots/p1-fixture.png), [P2 fixture](screenshots/
 `node scripts/check-live.mjs` checks the actual GitHub README picture in light, dark and reduced-motion modes, animation stages through GitHub’s image renderer, natural image dimensions, the whole-image Pages link, live visits, fresh statistics, App idle behavior and SVG Content-Type. Set `README_VERSION` to the deployed revision to refresh the GitHub page used for validation.
 
 The public checks use an unauthenticated Chromium session. Safari and Firefox have not been separately exercised.
+
+GitHub Actions [37476048285](https://github.com/mikamikasuki/mikamikasuki/actions/runs/37476048285) passed the full verification suite and deployed revision `531d8c7`.
