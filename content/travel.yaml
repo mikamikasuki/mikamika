@@ -12,7 +12,7 @@ preview:
   initial_idle_ms: 2000
   state_cycle_ms: 4000
   max_states: 51
-  order: [CA, NJ, NY, PA, MA, AZ]
+  order: [CA, NJ, NY, PA, WY, AZ, CO, DC, DE, IA, ID, IL, IN, MD, MI, MN, MT, NE, NV, OH, SD, UT, VA, WI, WV, MA]
   selection: stable
   max_photos: 3
   sample_photos_when_empty: true
