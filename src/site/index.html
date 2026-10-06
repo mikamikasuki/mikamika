@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Mika</title><link rel="stylesheet" href="./style.css"></head><body>
+<main><div id="scene" aria-label="Mika’s profile"><!-- SCENE --></div>
+<div class="controls"><label>State <select id="state-select"><option value="">Choose a state</option></select></label><label>Theme <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label></div><p id="state-note" role="status"></p>
+<details class="data-notes"><summary>Statistics</summary><p id="stats-note"></p></details>
+</main>
+<div id="bubble" class="bubble" hidden><button id="close-preview" class="close" aria-label="Close preview">×</button><h2></h2><p class="subtitle"></p><button id="photo-stack" class="photo-stack" aria-label="Open state album"></button><button id="open-album" class="album-link">View album</button></div>
+<dialog id="album" aria-labelledby="album-title"><button class="close" id="close-album" aria-label="Close album">×</button><h2 id="album-title"></h2><p id="album-subtitle"></p><div id="album-grid"></div></dialog>
+<dialog id="lightbox" aria-label="Photo viewer"><button class="close" id="close-lightbox" aria-label="Close photo viewer">×</button><button id="previous-photo" aria-label="Previous photo">‹</button><img id="large-photo" alt=""><button id="next-photo" aria-label="Next photo">›</button><p id="photo-counter"></p></dialog>
+<script type="module" src="./app.js"></script></body></html>

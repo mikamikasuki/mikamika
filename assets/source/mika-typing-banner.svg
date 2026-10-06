@@ -1,0 +1,167 @@
+<svg
+  width="1200"
+  height="170"
+  viewBox="0 0 1200 170"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#89A4EB"/>
+      <stop offset="48%" stop-color="#A592ED"/>
+      <stop offset="100%" stop-color="#C690E0"/>
+    </linearGradient>
+
+    <linearGradient id="waveA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#F5E8FF" stop-opacity="0.27"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+    </linearGradient>
+
+    <linearGradient id="waveB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E9EEFF" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#F5DDF8" stop-opacity="0.27"/>
+    </linearGradient>
+
+    <filter id="textGlow" x="-20%" y="-30%" width="140%" height="160%">
+      <feGaussianBlur stdDeviation="4.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <clipPath id="typeOne">
+      <rect x="360" y="47" width="0" height="64">
+        <animate
+          attributeName="width"
+          values="0;480;480;0;0"
+          keyTimes="0;0.17;0.38;0.43;1"
+          dur="8.8s"
+          repeatCount="indefinite"
+        />
+      </rect>
+    </clipPath>
+
+    <clipPath id="typeTwo">
+      <rect x="165" y="47" width="0" height="64">
+        <animate
+          attributeName="width"
+          values="0;0;0;870;870;0"
+          keyTimes="0;0.46;0.50;0.73;0.93;1"
+          dur="8.8s"
+          repeatCount="indefinite"
+        />
+      </rect>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="170" rx="30" fill="url(#bg)"/>
+
+  <circle cx="190" cy="32" r="72" fill="#FFFFFF" opacity="0.055">
+    <animate
+      attributeName="cy"
+      values="25;45;25"
+      dur="7s"
+      repeatCount="indefinite"
+    />
+  </circle>
+
+  <circle cx="1000" cy="38" r="96" fill="#F8DFFF" opacity="0.07">
+    <animate
+      attributeName="cx"
+      values="960;1025;960"
+      dur="9s"
+      repeatCount="indefinite"
+    />
+  </circle>
+
+  <g>
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="-45 0;45 0;-45 0"
+      dur="10s"
+      repeatCount="indefinite"
+    />
+
+    <path
+      d="
+        M -100 112
+        C 130 82, 305 145, 525 113
+        C 745 80, 930 91, 1300 120
+        L 1300 180
+        L -100 180 Z
+      "
+      fill="url(#waveA)"
+    />
+  </g>
+
+  <g>
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      values="38 0;-38 0;38 0"
+      dur="13s"
+      repeatCount="indefinite"
+    />
+
+    <path
+      d="
+        M -100 127
+        C 170 156, 365 102, 610 132
+        C 860 163, 1050 112, 1300 135
+        L 1300 180
+        L -100 180 Z
+      "
+      fill="url(#waveB)"
+    />
+  </g>
+
+  <text
+    x="600"
+    y="91"
+    text-anchor="middle"
+    font-family="Nunito, Quicksand, ui-rounded, 'Arial Rounded MT Bold', sans-serif"
+    font-size="43"
+    font-weight="700"
+    fill="#FFFFFF"
+    filter="url(#textGlow)"
+    clip-path="url(#typeOne)"
+  >
+    Hi, I’m Mika 🌷
+  </text>
+
+  <text
+    x="600"
+    y="91"
+    text-anchor="middle"
+    font-family="Nunito, Quicksand, ui-rounded, 'Arial Rounded MT Bold', sans-serif"
+    font-size="30"
+    font-weight="700"
+    fill="#FFFFFF"
+    filter="url(#textGlow)"
+    clip-path="url(#typeTwo)"
+  >
+    researcher + builder + occasionally too curious
+  </text>
+
+  <g fill="#FFFFFF">
+    <circle cx="105" cy="45" r="2.4">
+      <animate
+        attributeName="opacity"
+        values="0.15;0.85;0.15"
+        dur="2.8s"
+        repeatCount="indefinite"
+      />
+    </circle>
+
+    <circle cx="1090" cy="61" r="3">
+      <animate
+        attributeName="opacity"
+        values="0.18;0.82;0.18"
+        dur="3.3s"
+        repeatCount="indefinite"
+      />
+    </circle>
+  </g>
+</svg>

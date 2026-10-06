@@ -1,0 +1,53 @@
+name: Build and deploy profile
+on:
+  push:
+    branches: [main]
+    paths: ['content/**', 'photos/**', 'src/**', 'scripts/**', 'tests/**', 'assets/**', 'vendor/**', 'package*.json', 'playwright.config.mjs', '.github/workflows/pages.yml']
+  workflow_dispatch:
+  schedule:
+    - cron: '27 12 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: profile-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    permissions:
+      contents: read
+      pages: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.15.0'
+          cache: npm
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .cache
+          key: profile-build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/content/photos.mjs') }}-${{ github.run_id }}
+          restore-keys: |
+            profile-build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/content/photos.mjs') }}-
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run verify
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

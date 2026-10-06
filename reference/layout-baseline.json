@@ -1,0 +1,58 @@
+{
+  "note": "Initial normalized layout inferred from user reference images; validate visually and refine, excluding GitHub chrome.",
+  "reference_images": {
+    "p1": "reference/p1-idle.png",
+    "p2": "reference/p2-bubble.png",
+    "width": 2048,
+    "height": 762
+  },
+  "canvas": {
+    "width": 1200,
+    "height": 404
+  },
+  "boxes": {
+    "banner": [
+      0,
+      0,
+      1200,
+      122
+    ],
+    "about": [
+      0,
+      130,
+      1200,
+      84
+    ],
+    "stats": [
+      0,
+      222,
+      414,
+      172
+    ],
+    "streak": [
+      424,
+      222,
+      378,
+      172
+    ],
+    "travel": [
+      812,
+      222,
+      388,
+      172
+    ],
+    "bubble": [
+      856,
+      36,
+      245,
+      162
+    ]
+  },
+  "important": {
+    "left_labels": true,
+    "left_metrics_layout": "five vertical rows with one rank ring on the right",
+    "middle_layout": "total contributions left, current streak right",
+    "readme_single_composite": true,
+    "real_hover_only_in_pages": true
+  }
+}

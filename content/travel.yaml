@@ -1,0 +1,26 @@
+schema_version: 1
+map:
+  title: "where I’ve been ♡"
+  unvisited_color: "#E7E6ED"
+  visited_color: "#CAB8EE"
+  active_color: "#9B6DE3"
+  border_color: "#FFFFFF"
+  infer_visited_from_photos: true
+  footer_template: "{visited} / 50 states · click to explore"
+preview:
+  enabled: true
+  initial_idle_ms: 3000
+  state_cycle_ms: 13200
+  max_states: 6
+  order: []
+  selection: stable # stable or daily: rotate the selected preview subset by UTC build date
+  max_photos: 3
+  phases:
+    highlight: [0, 650]
+    enter: [350, 1250]
+    expand: [750, 1750]
+    hold: [1750, 7050]
+    collapse: [7050, 7950]
+    exit: [7650, 8550]
+    restore: [8150, 8800]
+states: {}

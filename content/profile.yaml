@@ -1,0 +1,11 @@
+schema_version: 1
+username: mikamikasuki
+name: Mika
+banner:
+  - "Hi, I’m Mika 🌷"
+  - "researcher + builder + occasionally too curious"
+about:
+  - "🌷 CS undergraduate at Rutgers University, currently spending a one-year gap year in California."
+  - "Next year, I’ll be heading to UT Austin for a Master’s in Computer Science on a full scholarship."
+  - "I hope to use both my technical skills and my token budget to give back to the open-source community. ♡"
+stats_timezone: America/Los_Angeles
