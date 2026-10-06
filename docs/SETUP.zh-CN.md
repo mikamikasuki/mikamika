@@ -57,13 +57,13 @@ states:
     preview_enabled: true
 ```
 
-`visited: false` 优先级最高：不着色、不轮播、不发布相册照片。`true` 表示去过，无照片也计数。省略或 `null` 时，根据 `map.infer_visited_from_photos` 和有效照片推断。地图、唯一州数量、README 轮播和相册使用同一个规范化 manifest。州数量只统计 50 州；DC 在 `regions.DC` 中配置并单独显示，照片目录为 `photos/Eastern/DC/`。当前已配置 24 个州及 DC。
+`visited: false` 优先级最高：不着色、不轮播、不发布相册照片。`true` 表示去过，无照片也计数。省略或 `null` 时，根据 `map.infer_visited_from_photos` 和有效照片推断。地图、唯一州数量、README 轮播和相册使用同一个规范化 manifest。州数量只统计 50 州；DC 在 `regions.DC` 中配置并单独显示，照片目录为 `photos/Eastern/DC/`。当前已配置 25 个州及 DC。
 
 `cover` 选择封面；`preview_photos` 控制气泡照片及顺序；`photo_order` 控制相册顺序。`photo_focus` 是 0–1 的横/纵焦点，缩略图按焦点裁切，不拉伸。州名缩字号以保留全文，灰字按实际字宽加省略号，详情页保留全文。空灰字保持空白。默认最多三张；第四张可把 `max_photos` 设为 4。
 
 `preview.order` 可填写 `[CA, NJ, AK]`。未列出的候选州按州代码排序。`max_states` 默认 6，仅限制 README 内嵌照片体积，不删去其他州的地图或相册。`selection: stable` 按固定顺序选取；`daily` 按 UTC 构建日期轮换预览子集。
 
-`preview.initial_idle_ms` 为初始停顿，默认 3000；`state_cycle_ms` 为单州完整周期，默认 13200。`phases` 集中控制高亮、进入、展开、保持、收叠、退出和恢复阶段。调整周期时也调整阶段结束时间，保留安静窗口。schema 会拒绝不合理范围和顺序。后层照片间隔约 90ms 展开，呼吸漂浮约 1.2px；前层保持清晰。
+`preview.initial_idle_ms` 为初始停顿，默认 2000；`state_cycle_ms` 为单州完整周期，默认 3000。`phases` 集中控制高亮、进入、展开、保持、收叠、退出和恢复阶段。调整周期时也调整阶段结束时间，保留安静窗口。schema 会拒绝不合理范围和顺序。后层照片间隔 40ms 向右下有序展开，保持相同尺寸且不旋转，呼吸漂浮约 1.2px；前层保持清晰。
 
 没有可预览照片时只显示正常状态，不会生成空气泡。当前生产旅行配置没有确认的访问记录或照片；参考图和测试图没有作为旅行内容发布。
 
@@ -83,7 +83,7 @@ states:
 
 ## Pages 操作
 
-悬停已访问州约 140ms 出现气泡；没有照片的州显示访问状态，照片叠层仅在已有真实照片时出现。移出后保留 250ms，可移入气泡取消关闭。点击州固定；另一州可切换；空白、关闭按钮或 Esc 解除。照片叠层和 View album 打开相册，大图可用左右键切换，Esc 返回并恢复焦点。手机使用选择器或点击地图，细小州也可通过选择器访问。相册链接 `#state=CA` 可刷新定位。
+悬停已访问州约 140ms 出现气泡；没有照片的已访问州使用三张标明为 Sample images 的模拟图片，真实照片上传后自动替换。移出后保留 250ms，可移入气泡取消关闭。点击州固定；另一州可切换；空白、关闭按钮或 Esc 解除。照片叠层和 View album 打开相册，大图可用左右键切换，Esc 返回并恢复焦点。手机使用选择器或点击地图，细小州也可通过选择器访问。相册链接 `#state=CA` 可刷新定位。
 
 任何手动操作都会暂停自动演示；只有连续 60 秒无操作且无固定气泡/相册/大图时恢复。reduced-motion 不自动演示。主题支持 light/dark/system；气泡放在根级 overlay 并限制在 viewport 内。
 
@@ -104,3 +104,5 @@ states:
 GitHub 图片代理可能延迟显示更新。先检查 Actions 成功的 SHA，再直接检查 Pages 图片和 data.json 的构建日期；必要时在 embed 的资源 URL 增加一个新的 `?v=` 版本号。不要每分钟改变版本或承诺代理立即刷新。
 
 `docs/profile-embed.md` 包含将来粘贴到个人主页 README 的完整片段，整幅图只有一个 Pages 链接；逐州点击在 Pages 中实现。
+
+`preview.sample_photos_when_empty` 控制无照片时的模拟图片。每州的 `subtitle` 填写城市与地点，显示为 `Visited:`。README 只显示一行，按粗体字形实际宽度截断并以 `...` 结束；Pages 气泡最多显示两行。完整周期是 3000ms，其中 0–1000ms 出现，1000–3000ms 完全收回。模拟图片源文件位于 `assets/samples/`。

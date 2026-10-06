@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#FFFAFD"><title>Where I’ve been — Mika</title><link rel="stylesheet" href="./style.css"></head><body>
 <main class="travel-shell">
 <nav class="journal-nav" aria-label="Main"><a class="brand" href="https://github.com/mikamikasuki">Mika <span>🌷</span></a><div class="nav-actions"><a href="#about" id="about-link">About</a><label class="theme-control"><span class="sr-only">Theme</span><select id="theme" aria-label="Theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label></div></nav>
-<header class="journal-header"><span class="journal-kicker">A LITTLE TRAVEL JOURNAL</span><h1>Where I’ve been <span>♡</span></h1><p id="journey-summary"></p></header>
+<header class="journal-header"><h1>Where I’ve been <span>♡</span></h1><p id="journey-summary"></p></header>
 <section class="journal-map-card" aria-labelledby="map-title">
 <div class="map-heading"><div><span class="section-kicker">UNITED STATES</span><h2 id="map-title">Places along the way</h2></div><div class="map-total"><strong id="state-count"></strong><span>states visited</span></div></div>
 <div class="large-map-frame"><svg id="travel-map" role="group" aria-label="Interactive travel map"></svg></div>
@@ -13,7 +13,7 @@
 <details class="data-notes"><summary>Statistics &amp; sources</summary><p id="stats-note"></p></details>
 <footer class="journal-footer"><span>Mika ♡</span><a href="https://github.com/mikamikasuki/mikamika">GitHub ↗</a></footer>
 </main>
-<div id="bubble" class="bubble" hidden><button id="close-preview" class="close" aria-label="Close preview">×</button><span id="bubble-category" class="bubble-category">VISITED</span><h2></h2><p class="subtitle"></p><button id="photo-stack" class="photo-stack" aria-label="Open place album"></button><p id="no-photos" hidden>No photos yet.</p><div class="bubble-footer"><span id="bubble-photo-count"></span><button id="open-album" class="album-link">View album <span>↗</span></button></div></div>
+<div id="bubble" class="bubble" hidden><button id="close-preview" class="close" aria-label="Close preview">×</button><h2></h2><p class="subtitle"></p><button id="photo-stack" class="photo-stack" aria-label="Open place album"></button><p id="no-photos" hidden>No photos yet.</p><div class="bubble-footer"><span id="bubble-photo-count"></span><button id="open-album" class="album-link">View album <span>↗</span></button></div></div>
 <dialog id="album" aria-labelledby="album-title"><button class="close" id="close-album" aria-label="Close album">×</button><div class="album-heading"><span class="section-kicker">PHOTO ALBUM</span><h2 id="album-title"></h2><p id="album-subtitle"></p></div><div id="album-grid"></div></dialog>
 <dialog id="lightbox" aria-label="Photo viewer"><button class="close" id="close-lightbox" aria-label="Close photo viewer">×</button><button id="previous-photo" aria-label="Previous photo">‹</button><img id="large-photo" alt=""><button id="next-photo" aria-label="Next photo">›</button><p id="photo-counter"></p></dialog>
 <script type="module" src="./app.js"></script></body></html>

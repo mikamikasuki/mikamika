@@ -1,6 +1,6 @@
 export const ease=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 const progress=(t,[a,b])=>ease((t-a)/(b-a));
-export const layerSpread=(t,phases,index)=>progress(t,[phases.expand[0]+index*90,phases.expand[1]+index*90])*(1-progress(t,[phases.collapse[0]+index*90,phases.collapse[1]+index*90]));
+export const layerSpread=(t,phases,index)=>progress(t,[phases.expand[0]+index*40,phases.expand[1]+index*40])*(1-progress(t,[phases.collapse[0]+index*40,phases.collapse[1]+index*40]));
 export function frameAt(timeMs,preview,states){
  if(!preview.enabled||!states.length||timeMs<preview.initial_idle_ms)return {state:null,opacity:0,highlight:0,spread:0,lift:10,scale:.96};
  const elapsed=timeMs-preview.initial_idle_ms, index=Math.floor(elapsed/preview.state_cycle_ms)%states.length,t=elapsed%preview.state_cycle_ms,p=preview.phases;

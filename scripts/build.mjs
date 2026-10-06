@@ -4,6 +4,7 @@ import { parse,stringify } from 'yaml';
 import { build } from 'esbuild';
 import sharp from 'sharp';
 import { profileSchema,travelSchema } from '../src/content/schema.mjs';
+import { addSamplePreviews } from '../src/content/samples.mjs';
 import { scanPhotos } from '../src/content/photos.mjs';
 import { fetchStats,localToken } from '../src/data/github.mjs';
 import { buildMap } from '../src/render/map.mjs';
@@ -26,7 +27,7 @@ if(fixtureMode){
  }
  travel.preview.order=['CA','NJ','AK','HI','RI','TX'];
 }
-const manifest=await scanPhotos(photoRoot,travel,stage);manifest.build_date=buildDate;
+const manifest=await scanPhotos(photoRoot,travel,stage);manifest.build_date=buildDate;await addSamplePreviews(manifest,travel,stage);
 for(const warning of manifest.warnings)console.warn(warning);
 const stats=fixtureMode?{status:'fixture',source:'visual-test fixture',stars:79,commits:63,prs:202,issues:26,contributed:134,total:394,created_at:'2025-05-11T00:00:00Z',rank:{level:'B+',percentile:45},streak:{count:7,start:'2025-09-29',end:'2025-10-05'}}:await fetchStats(profile,{token:process.env.OFFLINE==='1'?undefined:localToken()});
 const map=buildMap(layout,{includeRegions:true});
@@ -49,7 +50,7 @@ let html=await fs.readFile('src/site/index.html','utf8');html=html.replace('<!--
 await fs.writeFile(path.join(stage,'index.html'),html);
 await fs.copyFile('src/site/editor.html',path.join(stage,'editor.html'));await fs.copyFile('src/site/style.css',path.join(stage,'style.css'));
 await build({entryPoints:['src/site/app.mjs','src/site/editor.mjs'],outdir:stage,bundle:true,format:'esm',target:'es2022',minify:true});
-if(fixtureMode){await fs.writeFile(path.join(stage,'image-test.html'),'<!doctype html><html><body></body></html>');for(const [name,timeMs] of [['p1-idle',2500],['p2-bubble',6500],['p3-collapse',10800],['p4-idle',12500]])await fs.writeFile(path.join(stage,`${name}.svg`),renderScene({profile,travel,layout,manifest:embedded,stats,map,timeMs,theme:'light',buildDate}));}
+if(fixtureMode){await fs.writeFile(path.join(stage,'image-test.html'),'<!doctype html><html><body></body></html>');for(const [name,timeMs] of [['p1-idle',1000],['p2-bubble',2500],['p3-collapse',2850],['p4-idle',3500]])await fs.writeFile(path.join(stage,`${name}.svg`),renderScene({profile,travel,layout,manifest:embedded,stats,map,timeMs,theme:'light',buildDate}));}
 await fs.rm(dest,{recursive:true,force:true});await fs.rename(stage,dest);
 if(!fixtureMode){await fs.mkdir('assets/generated',{recursive:true});for(const theme of ['light','dark'])await fs.copyFile(`${dest}/assets/readme/profile-${theme}-static.svg`,`assets/generated/profile-${theme}-static.svg`);await fs.writeFile('assets/generated/stats.json',JSON.stringify(stats,null,2)+'\n');}
 console.log(`Built ${dest}: ${manifest.visited} visited states, ${[...manifest.states,...manifest.regions].reduce((a,s)=>a+s.photos.length,0)} public photos.`);
