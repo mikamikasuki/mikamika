@@ -21,3 +21,5 @@ Screenshots: [P1 fixture](screenshots/p1-fixture.png), [P2 fixture](screenshots/
 The public checks use an unauthenticated Chromium session. Safari and Firefox have not been separately exercised.
 
 [GitHub Actions run 37471457741](https://github.com/mikamikasuki/mikamika/actions/runs/37471457741) passed the complete verification suite and deployed build `57dbd23`.
+
+Public checks passed for build `57dbd23`: GitHub light/dark/reduced-motion image sources, live SVG dimensions and MIME type, 25 states, sample previews, fresh statistics and App idle behavior. Actual GitHub image captures confirm the visible, retracted and next-state stages, with mean changed channel values of 16.98, 16.87 and 20.94/255 in the bubble region. [P1 production](screenshots/p1-production.png) and [P2 production](screenshots/p2-production.png) show the Camo-served README.
