@@ -10,7 +10,7 @@ permissions:
   contents: read
 concurrency:
   group: profile-pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   build:
     permissions:
