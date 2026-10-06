@@ -19,6 +19,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Detect photo-only upload
+        id: changes
+        if: github.event_name == 'push'
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          files=$(git diff --name-only "$BEFORE" "$GITHUB_SHA")
+          if [ -n "$files" ]; then
+            while IFS= read -r file; do
+              case "$file" in photos/*) ;; *) exit 0 ;; esac
+            done <<< "$files"
+            echo 'photos_only=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22.15.0'
@@ -30,8 +45,17 @@ jobs:
           restore-keys: |
             profile-build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/content/photos.mjs') }}-
       - run: npm ci
+      - name: Install HEIC decoder
+        run: sudo apt-get update && sudo apt-get install -y libheif-examples
       - run: npx playwright install --with-deps chromium
+        if: steps.changes.outputs.photos_only != 'true'
       - run: npm run verify
+        if: steps.changes.outputs.photos_only != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
+      - name: Build and validate uploaded photos
+        if: steps.changes.outputs.photos_only == 'true'
+        run: npm run build && node scripts/validate-output.mjs
         env:
           GH_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5

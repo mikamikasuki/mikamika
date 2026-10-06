@@ -1,9 +1,22 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import os from 'node:os';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import sharp from 'sharp';
 import { PLACES, PLACE_CODES } from './states.mjs';
-const supported=/\.(jpe?g|png|webp)$/i;
+const supported=/\.(jpe?g|png|webp|heic)$/i;
+const convert=promisify(execFile);
+async function imageData(file,source){
+ if(!/\.heic$/i.test(file))return source;
+ const temp=await fs.mkdtemp(path.join(os.tmpdir(),'mikamika-heic-'));
+ try{
+  const output=path.join(temp,'photo.jpg');
+  await convert('heif-convert',['--quiet','-q','95',file,output]);
+  return await fs.readFile(output);
+ }finally{await fs.rm(temp,{recursive:true,force:true});}
+}
 const natural=new Intl.Collator('en',{numeric:true,sensitivity:'base'});
 const within=(root,p)=>p===root||p.startsWith(root+path.sep);
 export async function scanPhotos(root,config,out,{cache='.cache/photos'}={}){
@@ -27,10 +40,11 @@ export async function scanPhotos(root,config,out,{cache='.cache/photos'}={}){
    const files=(await fs.readdir(dir,{withFileTypes:true})).filter(e=>!e.name.startsWith('.')&&!e.isDirectory()&&supported.test(e.name)).sort((a,b)=>natural.compare(a.name,b.name));
    for(const f of files){const p=path.join(dir,f.name);const real=await fs.realpath(p);if(!within(root,real))throw new Error(`Photo link escapes photos root: ${base.code}/${f.name}`);if(f.isSymbolicLink()){warnings.push(`Skipped symbolic link: ${base.code}/${f.name}`);continue;}
     try {
-     const data=await fs.readFile(p),focus=c.photo_focus?.[f.name]??[.5,.5];
-     const hash=crypto.createHash('sha256').update(data).update(JSON.stringify({v:2,focus,width:1800,thumb:[420,260]})).digest('hex').slice(0,24);
+     const source=await fs.readFile(p),focus=c.photo_focus?.[f.name]??[.5,.5];
+     const hash=crypto.createHash('sha256').update(source).update(JSON.stringify({v:2,focus,width:1800,thumb:[420,260]})).digest('hex').slice(0,24);
      const thumb=`${hash}-thumb.webp`,full=`${hash}.webp`;
      try{await fs.access(path.join(cache,thumb));await fs.access(path.join(cache,full));}catch{
+      const data=await imageData(p,source);
       const {data:normal,info}=await sharp(data,{limitInputPixels:60_000_000}).rotate().toColourspace('srgb').resize({width:1800,height:1800,fit:'inside',withoutEnlargement:true}).webp({quality:85}).toBuffer({resolveWithObject:true});
       const scale=Math.max(420/info.width,260/info.height),w=Math.ceil(info.width*scale),h=Math.ceil(info.height*scale);
       const left=Math.max(0,Math.min(w-420,Math.round(w*focus[0]-210))),top=Math.max(0,Math.min(h-260,Math.round(h*focus[1]-130)));
@@ -38,7 +52,10 @@ export async function scanPhotos(root,config,out,{cache='.cache/photos'}={}){
      }
      await fs.copyFile(path.join(cache,thumb),path.join(out,'photos',thumb));await fs.copyFile(path.join(cache,full),path.join(out,'photos',full));
      valid.push({name:f.name,thumb:`photos/${thumb}`,src:`photos/${full}`,focus});
-    }catch{warnings.push(`Invalid image skipped: ${base.code}/${f.name}`);}
+    }catch(error){
+     if(/\.heic$/i.test(f.name))throw new Error(`Could not convert HEIC photo ${base.code}/${f.name}: ${error.message}`);
+     warnings.push(`Invalid image skipped: ${base.code}/${f.name}`);
+    }
    }
   }
   const rank=f=>c.photo_order?.indexOf(f.name)??-1;
