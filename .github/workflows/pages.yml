@@ -46,7 +46,7 @@ jobs:
             profile-build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/content/photos.mjs') }}-
       - run: npm ci
       - name: Install HEIC decoder
-        run: sudo apt-get update && sudo apt-get install -y libheif-examples
+        run: sudo apt-get update && sudo apt-get install -y libheif-examples libheif-plugin-libde265
       - run: npx playwright install --with-deps chromium
         if: steps.changes.outputs.photos_only != 'true'
       - run: npm run verify
