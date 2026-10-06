@@ -2,9 +2,9 @@
 
 Run `npm run verify` on Node.js 22.15.0 with Playwright Chromium installed.
 
-The local run passed **26 unit tests and 18 browser tests**. Coverage includes image normalization, cache invalidation, statistics fallback, animation timing, state geometry, hover cancellation, pointer tracking, pinning, keyboard focus, albums, hash restoration, YAML editing and reduced motion. Layout checks cover 1200, 900, 760, 430 and 375px viewports in dark mode.
+The local run passed **27 unit tests and 19 browser tests**. Coverage includes image normalization, cache invalidation, statistics fallback, animation timing, state geometry, hover cancellation, pointer tracking, pinning, keyboard focus, albums, hash restoration, YAML editing and reduced motion. Layout checks cover 1200, 900, 760, 430 and 375px viewports in dark mode.
 
-The README uses a **two-second visible interval followed by two seconds fully retracted**. The script-free SVG image test captures idle, visible, retracted and next-state stages with stable 1200×404 boundaries. Geometry checks confirm that every state and DC has an in-fill anchor, the pointer base is centered, its tip reaches the anchor and the bubble body fits the canvas. App checks confirm mouse tracking, click pinning and no automatic bubble after 75 seconds of idle time.
+The README cycles through **all 25 visited states and Washington, D.C.**, with no missing or repeated place before the loop restarts. A browser test seeks through every place in the generated SVG and verifies exactly one visible bubble at each stop. The complete 26-place cycle lasts **104 seconds**, with a **two-second visible interval followed by two seconds fully retracted** per place. The script-free SVG image test captures idle, visible, retracted and next-state stages with stable 1200×404 boundaries. Geometry checks confirm that every state and DC has an in-fill anchor, the pointer base is centered, its tip reaches the anchor and the bubble body fits the canvas. App checks confirm mouse tracking, click pinning and no automatic bubble after 75 seconds of idle time.
 
 Both renderers use the same normalized, critically damped spring for the bubble and ordered photo stack. Front and rear photos have equal dimensions and parallel edges; rear photos have increasing blur and transparency. README photos measure 132×82 in SVG coordinates, with 18×9 offsets. The gray Visited: text uses 10.5px and one-line ellipsis; App text uses two-line clamping. The banner has a synchronized blinking typing caret, and static images omit it.
 
@@ -19,7 +19,3 @@ Screenshots: [P1 fixture](screenshots/p1-fixture.png), [P2 fixture](screenshots/
 `node scripts/check-live.mjs` checks the actual GitHub README picture in light, dark and reduced-motion modes, animation stages through GitHub’s image renderer, natural image dimensions, the whole-image Pages link, live visits, fresh statistics, App idle behavior and SVG Content-Type. Set `README_VERSION` to the deployed revision to refresh the GitHub page used for validation.
 
 The public checks use an unauthenticated Chromium session. Safari and Firefox have not been separately exercised.
-
-[GitHub Actions run 37471457741](https://github.com/mikamikasuki/mikamika/actions/runs/37471457741) passed the complete verification suite and deployed build `57dbd23`.
-
-Public checks passed for build `57dbd23`: GitHub light/dark/reduced-motion image sources, live SVG dimensions and MIME type, 25 states, sample previews, fresh statistics and App idle behavior. Actual GitHub image captures confirm the visible, retracted and next-state stages, with mean changed channel values of 16.98, 16.87 and 20.94/255 in the bubble region. [P1 production](screenshots/p1-production.png) and [P2 production](screenshots/p2-production.png) show the Camo-served README.

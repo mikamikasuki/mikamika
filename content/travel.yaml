@@ -11,7 +11,7 @@ preview:
   enabled: true
   initial_idle_ms: 2000
   state_cycle_ms: 4000
-  max_states: 6
+  max_states: 51
   order: [CA, NJ, NY, PA, MA, AZ]
   selection: stable
   max_photos: 3
