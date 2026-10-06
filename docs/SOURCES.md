@@ -11,4 +11,6 @@ GitHub Pages workflow versions were checked against the official repositories on
 
 The travel journal layout was informed by the travel page in [mikamikasuki/mika](https://github.com/mikamikasuki/mika/tree/708cb069d5a48336989732b690f5039a253ff413/docs/travel): its standalone map, photo stack and album navigation.
 
-Statistics icons are vendored from [github-readme-stats](https://github.com/anuraghazra/github-readme-stats/blob/54a7985aeefda00d5eadb55b80c17c7f976c37d2/src/common/icons.js) under its MIT license. Their source revision is `54a7985aeefda00d5eadb55b80c17c7f976c37d2`. Card text uses [Arimo](https://fontsource.org/fonts/arimo), an Arial-style sans serif, under the bundled SIL Open Font License.
+Statistics icons are vendored from [github-readme-stats](https://github.com/anuraghazra/github-readme-stats/blob/54a7985aeefda00d5eadb55b80c17c7f976c37d2/src/common/icons.js) under its MIT license. Their source revision is `54a7985aeefda00d5eadb55b80c17c7f976c37d2`. Card text uses Nunito bold; the rank letter and smaller plus sign are sized separately.
+
+Motion follows Apple’s [Animate with springs](https://developer.apple.com/videos/play/wwdc2023/10158/) guidance on continuous velocity and smooth, non-bouncing springs, and its [motion guidelines](https://developer.apple.com/design/human-interface-guidelines/motion). The normalized critically damped response and durations are configured for this layout, rather than copied from an undocumented system animation. SVG samples and browser keyframes use the same response.
