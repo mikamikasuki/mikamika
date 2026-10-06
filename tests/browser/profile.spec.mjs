@@ -39,3 +39,37 @@ test('larger profile preserves label spacing and uniform popup proportions',asyn
  const label=await p.locator('#scene-backdrop g[aria-label="Total Commits (last year):"]').boundingBox(),number=await p.locator('#scene-backdrop g[aria-label="63"]').boundingBox();expect(number.x-label.x-label.width).toBeGreaterThan(3);
  const photo=await p.locator('#layer-CA-0 > g > rect').first().boundingBox(),body=await p.locator('#bubble-CA > g > path').first().boundingBox();expect(photo.width).toBeCloseTo(data.layout.bubble.photo[2]*data.layout.bubble.scale,1);expect(photo.height).toBeCloseTo(data.layout.bubble.photo[3]*data.layout.bubble.scale,1);expect(body.width).toBeCloseTo(data.layout.boxes.bubble[2]*data.layout.bubble.scale,1);expect(await p.locator('svg').getAttribute('height')).toBe(String(data.layout.canvas.height));
 });
+
+test('card entrance draws fixed rings and reveals an overlapping regional wave once',async({page:p})=>{
+ const url='http://127.0.0.1:4176/mikamika/',data=await(await p.request.get(url+'data.json')).json();
+ for(const theme of ['light','dark']){
+  await p.setContent(await(await p.request.get(url+`assets/readme/profile-${theme}.svg`)).text());
+  const result=await p.evaluate(map=>{
+   const animations=document.getAnimations();for(const a of animations)a.pause();
+   const seek=t=>{for(const a of animations)a.currentTime=t;};
+   const read=()=>({rows:[...document.querySelectorAll('.scene-row-intro')].map(e=>+getComputedStyle(e).opacity),rings:[...document.querySelectorAll('#scene-rank-ring,#scene-streak-ring')].map(e=>({transform:getComputedStyle(e).transform,dash:parseFloat(getComputedStyle(e).strokeDasharray),opacity:+getComputedStyle(e).opacity})),zoom:getComputedStyle(document.getElementById('scene-map-intro')).transform,states:[...document.querySelectorAll('path[id^="state-"].scene-card-intro')].map(e=>({code:e.id.slice(6),delay:parseFloat(getComputedStyle(e).animationDelay),duration:parseFloat(getComputedStyle(e).animationDuration),fill:getComputedStyle(e).fill,base:e.getAttribute('fill'),x:map.find(s=>s.code===e.id.slice(6)).anchor[0]}))});
+   seek(0);const start=read();seek(350);const entering=read();seek(1600);const end=read();seek(105000);const later=read();
+   return {start,entering,end,later,iterations:[...document.querySelectorAll('.scene-card-intro')].every(e=>getComputedStyle(e).animationIterationCount==='1')};
+  },data.map);
+  expect(result.start.rows).toEqual([0,0,0,0,0]);expect(result.entering.rows[0]).toBeGreaterThan(result.entering.rows[1]);expect(result.entering.rows[4]).toBe(0);
+  expect(result.start.rings.every(r=>r.dash===0&&r.opacity===0)).toBe(true);
+  for(let i=0;i<2;i++){expect(result.entering.rings[i].dash).toBeGreaterThan(0);expect(result.entering.rings[i].dash).toBeLessThan(result.end.rings[i].dash||277);expect(result.entering.rings[i].transform).toBe(result.start.rings[i].transform);if(i===0)expect(result.end.rings[i].transform).toBe(result.start.rings[i].transform);else expect(result.end.rings[i].transform).toBe('none');}
+  expect(result.start.zoom).toBe('matrix(1.08, 0, 0, 1.08, 0, 0)');expect(result.end.zoom).toBe('none');expect(result.end.rows).toEqual([1,1,1,1,1]);
+  expect(result.end.states).toHaveLength(26);const ordered=[...result.end.states].sort((a,b)=>a.delay-b.delay);
+  expect(ordered.some((s,i)=>i&&s.x>ordered[i-1].x)).toBe(true);
+  const byCode=Object.fromEntries(ordered.map(s=>[s.code,s]));expect(byCode.NY.delay).toBeLessThan(byCode.OH.delay);expect(byCode.OH.delay).toBeLessThan(byCode.CO.delay);expect(byCode.CO.delay).toBeLessThan(byCode.CA.delay);
+  expect(byCode.OH.delay).toBeLessThan(byCode.PA.delay+byCode.PA.duration);expect(byCode.CO.delay).toBeLessThan(byCode.SD.delay+byCode.SD.duration);expect(byCode.NV.delay).toBeLessThan(byCode.ID.delay+byCode.ID.duration);
+  for(const s of result.end.states){expect(s.duration).toBeGreaterThanOrEqual(.35);expect(s.duration).toBeLessThanOrEqual(.5);expect(s.delay+s.duration).toBeLessThanOrEqual(1.6);const hex=s.base.slice(1);expect(s.fill).toBe(`rgb(${[0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)).join(', ')})`);}
+  expect(result.later).toEqual(result.end);expect(result.iterations).toBe(true);
+ }
+ await p.emulateMedia({reducedMotion:'reduce'});await p.setContent(await(await p.request.get(url+'scene-light.svg')).text());expect(await p.evaluate(()=>document.getAnimations().length)).toBe(0);expect(await p.locator('.scene-row-intro').first().evaluate(e=>getComputedStyle(e).opacity)).toBe('1');
+});
+
+test('About card entrance waits for expansion and does not replay on reopening',async({page:p})=>{
+ await ready(p);await expect(p.locator('#scene>svg')).toHaveAttribute('data-card-intro','pending');
+ expect(await p.locator('#scene .scene-row-intro').first().evaluate(e=>getComputedStyle(e).animationPlayState)).toBe('paused');
+ await p.locator('#about summary').click();await expect(p.locator('#scene>svg')).not.toHaveAttribute('data-card-intro','pending');
+ await p.waitForTimeout(1900);await p.locator('#about summary').click();await p.locator('#about summary').click();
+ expect(await p.locator('#scene .scene-row-intro').first().evaluate(e=>getComputedStyle(e).opacity)).toBe('1');
+ await p.locator('#theme').selectOption('dark');await expect(p.locator('#scene>svg')).toHaveAttribute('data-card-intro','complete');expect(await p.locator('#scene .scene-row-intro').first().evaluate(e=>getComputedStyle(e).opacity)).toBe('1');
+});

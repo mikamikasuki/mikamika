@@ -3,7 +3,7 @@ import {spring,smooth,motionSamples} from '../render/motion.mjs';
 import {placeBubble} from '../render/placement.mjs';
 const $=s=>document.querySelector(s);const data=await (await fetch('./data.json')).json();const {profile,travel,layout:l,manifest,stats,map}=data;const places=[...manifest.states,...(manifest.regions??[])];
 const scene=$('#scene'),bubble=$('#bubble'),album=$('#album'),lightbox=$('#lightbox'),select=$('#state-select');
-let mode='idle',active=null,pinned=null,enterTimer,leaveTimer,restoreFocus=null,photoIndex=0,albumState=null,theme='system',target=null,animationGeneration=0;
+let mode='idle',active=null,pinned=null,enterTimer,leaveTimer,restoreFocus=null,photoIndex=0,albumState=null,theme='system',target=null,animationGeneration=0,cardIntroStarted=false;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)'),dark=matchMedia('(prefers-color-scheme: dark)');
 
 function state(code){return places.find(s=>s.code===code);}
@@ -61,7 +61,7 @@ function renderPlaces(){
  const districts=(manifest.regions??[]).filter(s=>s.visited);$('#journey-summary').textContent=`${manifest.visited} / 50 states`;$('#state-count').textContent=`${manifest.visited} / 50`;$('#district-note').textContent=districts.length?'Washington, D.C. is listed separately.':'';const albums=places.filter(s=>s.visited&&s.photos.length).length;$('#album-total').textContent=albums?`${albums} photo albums`:'';
 }
 async function setTheme(value){theme=value;localStorage.setItem('mika-theme',value);const resolved=value==='system'?(dark.matches?'dark':'light'):value;document.documentElement.dataset.theme=resolved;
- const source=await (await fetch(`./scene-${resolved}.svg`)).text();scene.innerHTML=source;const mobile=document.createElement('div');mobile.className='mobile-about';for(const line of profile.about){const p=document.createElement('p');p.textContent=line;mobile.append(p);}scene.append(mobile);createMap();colorMap(active);positionBubble();}
+ const source=await (await fetch(`./scene-${resolved}.svg`)).text();scene.innerHTML=source.replace('<svg ',`<svg data-card-intro="${cardIntroStarted?'complete':'pending'}" `);if($('#about').open&&!cardIntroStarted)startCardIntro();const mobile=document.createElement('div');mobile.className='mobile-about';for(const line of profile.about){const p=document.createElement('p');p.textContent=line;mobile.append(p);}scene.append(mobile);createMap();colorMap(active);positionBubble();}
 for(const s of places){const o=document.createElement('option');o.value=s.code;o.textContent=`${s.code} — ${s.title}${s.visited?' ♡':''}`;select.append(o);}
 select.addEventListener('change',()=>{if(select.value)choose(select.value,select);else{manual();closePreview();}});
 bubble.addEventListener('pointerenter',()=>clearTimeout(leaveTimer));bubble.addEventListener('pointerleave',()=>{if(!pinned)leaveTimer=setTimeout(()=>closePreview(),250);});
@@ -76,6 +76,8 @@ $('#open-album').addEventListener('click',()=>openAlbum(active));$('#photo-stack
 $('#previous-photo').addEventListener('click',()=>{photoIndex=(photoIndex-1+albumState.photos.length)%albumState.photos.length;displayPhoto();});$('#next-photo').addEventListener('click',()=>{photoIndex=(photoIndex+1)%albumState.photos.length;displayPhoto();});
 album.addEventListener('cancel',e=>{e.preventDefault();closeAlbum();});lightbox.addEventListener('cancel',e=>{e.preventDefault();closePhoto();});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!album.open&&!lightbox.open){manual();closePreview({focus:true});}if(lightbox.open&&['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();photoIndex=(photoIndex+(e.key==='ArrowRight'?1:-1)+albumState.photos.length)%albumState.photos.length;displayPhoto();}});
 $('#theme').value=localStorage.getItem('mika-theme')??'system';$('#theme').addEventListener('change',()=>setTheme($('#theme').value));dark.addEventListener('change',()=>{if(theme==='system')setTheme('system');});await setTheme($('#theme').value);renderPlaces();$('#about-link').addEventListener('click',()=>{$('#about').open=true;});
+function startCardIntro(){cardIntroStarted=true;scene.querySelector('svg')?.removeAttribute('data-card-intro');}
+$('#about').addEventListener('toggle',()=>{if($('#about').open&&!cardIntroStarted)startCardIntro();});
 $('#stats-note').textContent=`${stats.source}; ${stats.status}. ${stats.fetched_at?'Fetched '+stats.fetched_at:'No successful fetch yet'}. Commits: ${stats.window?.from??'—'} to ${stats.window?.to??'—'}. Contributions: ${stats.created_at??'—'} to present. Streak timezone: ${profile.stats_timezone}; yesterday continues a streak until today ends. GitHub contribution dates use the API’s calendar dates. Rank uses github-readme-stats; it is not a GitHub badge.`;
 function readHash(){const code=new URLSearchParams(location.hash.slice(1)).get('state');if(code&&state(code)){restoreFocus=select;pinned=code;openAlbum(code,{hash:false});}}readHash();addEventListener('hashchange',readHash);
 document.fonts.ready.then(positionBubble);new ResizeObserver(positionBubble).observe($('#travel-map'));
