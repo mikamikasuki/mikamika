@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { parse } from 'yaml';
+import { parse,stringify } from 'yaml';
 import { build } from 'esbuild';
 import sharp from 'sharp';
 import { profileSchema,travelSchema } from '../src/content/schema.mjs';
@@ -40,7 +40,7 @@ for(const theme of ['light','dark'])for(const motion of ['animated','static']){
 }
 const publicData={profile,travel,layout,manifest,stats,map};
 await fs.writeFile(path.join(stage,'data.json'),JSON.stringify(publicData));
-await fs.writeFile(path.join(stage,'travel.yaml'),await fs.readFile('content/travel.yaml'));
+await fs.writeFile(path.join(stage,'travel.yaml'),fixtureMode?stringify(travel):await fs.readFile('content/travel.yaml'));
 await fs.mkdir(path.join(stage,'assets/fonts'),{recursive:true});
 for(const weight of [400,700,800])await fs.copyFile(`node_modules/@fontsource/nunito/files/nunito-latin-${weight}-normal.woff2`,path.join(stage,`assets/fonts/nunito-${weight}.woff2`));
 await fs.writeFile(path.join(stage,'scene-light.svg'),renderScene({...publicData,manifest:embedded,theme:'light'}));
@@ -52,4 +52,4 @@ await build({entryPoints:['src/site/app.mjs','src/site/editor.mjs'],outdir:stage
 if(fixtureMode){await fs.writeFile(path.join(stage,'image-test.html'),'<!doctype html><html><body></body></html>');for(const [name,timeMs] of [['p1-idle',2500],['p2-bubble',6500],['p3-collapse',10800],['p4-idle',12500]])await fs.writeFile(path.join(stage,`${name}.svg`),renderScene({profile,travel,layout,manifest:embedded,stats,map,timeMs,theme:'light',buildDate}));}
 await fs.rm(dest,{recursive:true,force:true});await fs.rename(stage,dest);
 if(!fixtureMode){await fs.mkdir('assets/generated',{recursive:true});for(const theme of ['light','dark'])await fs.copyFile(`${dest}/assets/readme/profile-${theme}-static.svg`,`assets/generated/profile-${theme}-static.svg`);await fs.writeFile('assets/generated/stats.json',JSON.stringify(stats,null,2)+'\n');}
-console.log(`Built ${dest}: ${manifest.visited} visited states, ${manifest.states.reduce((a,s)=>a+s.photos.length,0)} public photos.`);
+console.log(`Built ${dest}: ${manifest.visited} visited states, ${[...manifest.states,...manifest.regions].reduce((a,s)=>a+s.photos.length,0)} public photos.`);

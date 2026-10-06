@@ -44,9 +44,9 @@
   "fonts": {
     "banner": 40,
     "about": 14.5,
-    "label": 13,
-    "number": 13,
-    "title": 18,
+    "label": 12.5,
+    "number": 12.5,
+    "title": 14,
     "large": 34
   },
   "map": {

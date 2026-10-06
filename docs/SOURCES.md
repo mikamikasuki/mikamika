@@ -10,3 +10,5 @@
 GitHub Pages workflow versions were checked against the official repositories on 2026-10-06. Checkout 7.0.1, setup-node 7.0.0, cache 6.1.0 and the official configure-pages v5 / upload-pages-artifact v4 / deploy-pages v4 actions are pinned to full commit SHAs. Deployment structure follows <https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages>.
 
 The travel journal layout was informed by the travel page in [mikamikasuki/mika](https://github.com/mikamikasuki/mika/tree/708cb069d5a48336989732b690f5039a253ff413/docs/travel): its standalone map, photo stack and album navigation.
+
+Statistics icons are vendored from [github-readme-stats](https://github.com/anuraghazra/github-readme-stats/blob/54a7985aeefda00d5eadb55b80c17c7f976c37d2/src/common/icons.js) under its MIT license. Their source revision is `54a7985aeefda00d5eadb55b80c17c7f976c37d2`. Card text uses [Arimo](https://fontsource.org/fonts/arimo), an Arial-style sans serif, under the bundled SIL Open Font License.

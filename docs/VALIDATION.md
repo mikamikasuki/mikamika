@@ -8,7 +8,7 @@ Production contains **24 visited states and Washington, D.C.**, with DC excluded
 
 The SVG `<img>` test captures multiple animation stages and checks changing bubble pixels, the return to idle and stable 1200×404 boundaries. In-fill geometry checks verify all fifty state anchors and the DC boundary. Output validation passed for 16 files, including resource resolution, forbidden executable SVG content, private paths and photo metadata.
 
-Reference comparison normalizes the supplied images to 1200×404 and masks changing statistics, dates, map colors and fixture photos. Mean RGB differences were **6.082/255 for P1** and **8.317/255 for P2**, under the broad layout/palette regression threshold of 18/255. This measurement is not a claim of pixel-perfect reconstruction. Foreground photographs remain sharp; rear layers are progressively blurred and translucent, and the bubble samples a blurred backdrop beneath its glass tint.
+Reference comparison normalizes the supplied images to 1200×404 and masks changing statistics, dates, map colors and fixture photos. Mean RGB differences were **6.659/255 for P1** and **8.872/255 for P2**, under the broad layout/palette regression threshold of 18/255. This measurement is not a claim of pixel-perfect reconstruction. Foreground photographs remain sharp; rear layers are progressively blurred and translucent, and the bubble samples a blurred backdrop beneath its glass tint.
 
 Screenshots: [P1 fixture](screenshots/p1-fixture.png), [P2 fixture](screenshots/p2-fixture.png), [travel page](screenshots/travel-desktop.png), [mobile page](screenshots/travel-mobile.png). Fixture screenshots contain synthetic test images, not travel records.
 

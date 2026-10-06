@@ -79,7 +79,7 @@ states:
 
 `content/layout.json`：固定 1200×404 画布、横幅/介绍/三卡/气泡位置、字体与地图区域。README 和 Pages 共用地图路径与锚点。Pages 使用独立大地图、访问列表与相册布局；手机保留可点击地图和选择器。气泡尾部在局部坐标中固定，完整气泡随州锚点移动；README 位移幅度由 `bubble.origin_anchor` / `max_shift` 控制。州边界来自 Census 2017，通过 us-atlas 简化并采用 Albers USA 投影；AK/HI 有独立 inset。锚点使用最大可见多边形的内点算法，不使用 bounding-box 中心。
 
-字体使用固定依赖的 Nunito（SIL OFL），README 构建时生成字形路径，播放时不加载外部字体。Pages 使用相同字体的本地 WOFF2。默认英文内容和州名可完整显示；Nunito 不含中文字形，若改为中文介绍/州名，需更换有授权且包含这些字形的字体后构建。中文照片文件名不受影响。
+横幅、介绍与气泡使用 Nunito，统计卡使用 Arial 风格的 Arimo；两者均为固定版本的 SIL OFL 字体。README 构建时生成字形路径，播放时不加载外部字体。Pages 使用相同字体的本地 WOFF2。默认英文内容和州名可完整显示；Nunito 不含中文字形，若改为中文介绍/州名，需更换有授权且包含这些字形的字体后构建。中文照片文件名不受影响。
 
 ## Pages 操作
 
