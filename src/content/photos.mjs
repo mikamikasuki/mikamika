@@ -13,7 +13,11 @@ async function imageData(file,source){
  const temp=await fs.mkdtemp(path.join(os.tmpdir(),'mikamika-heic-'));
  try{
   const output=path.join(temp,'photo.jpg');
-  await convert('heif-convert',['--quiet','-q','95',file,output]);
+  if(process.env.HEIC_PYTHON){
+   await convert(process.env.HEIC_PYTHON,['scripts/convert-heic.py',file,output]);
+  }else{
+   await convert('heif-convert',['--quiet','-q','95',file,output]);
+  }
   return await fs.readFile(output);
  }finally{await fs.rm(temp,{recursive:true,force:true});}
 }

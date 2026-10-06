@@ -46,18 +46,22 @@ jobs:
             profile-build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/content/photos.mjs') }}-
       - run: npm ci
       - name: Install HEIC decoder
-        run: sudo apt-get update && sudo apt-get install -y libheif-examples libheif-plugin-libde265
+        run: |
+          python3 -m venv .heif-venv
+          .heif-venv/bin/pip install --disable-pip-version-check pillow-heif==1.5.0
       - run: npx playwright install --with-deps chromium
         if: steps.changes.outputs.photos_only != 'true'
       - run: npm run verify
         if: steps.changes.outputs.photos_only != 'true'
         env:
           GH_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
+          HEIC_PYTHON: .heif-venv/bin/python
       - name: Build and validate uploaded photos
         if: steps.changes.outputs.photos_only == 'true'
         run: npm run build && node scripts/validate-output.mjs
         env:
           GH_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
+          HEIC_PYTHON: .heif-venv/bin/python
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
