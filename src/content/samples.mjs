@@ -5,7 +5,7 @@ import sharp from 'sharp';
 export async function addSamplePreviews(manifest,travel,out){
  if(!travel.preview.sample_photos_when_empty)return;
  const places=[...manifest.states,...manifest.regions];
- if(!places.some(s=>s.visited&&!s.photos.length))return;
+ if(!places.some(s=>s.visited&&s.photos.length<travel.preview.max_photos))return;
  await fs.mkdir(path.join(out,'samples'),{recursive:true});
  const samples=[];
  for(let i=1;i<=3;i++){
@@ -16,5 +16,9 @@ export async function addSamplePreviews(manifest,travel,out){
   samples.push({name:`Sample image ${i}`,sample:true,src,thumb});
  }
  manifest.sample_photos=samples;
- for(const s of places)if(s.visited&&!s.photos.length)s.preview=samples.slice(0,travel.preview.max_photos);
+ for(const s of places){
+  if(!s.visited||s.photos.length>=travel.preview.max_photos)continue;
+  const real=[...s.preview,...s.photos.filter(f=>!s.preview.includes(f))];
+  s.preview=[...real,...samples.slice(0,travel.preview.max_photos-real.length)];
+ }
 }
